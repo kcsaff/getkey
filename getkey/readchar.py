@@ -17,7 +17,7 @@ else:
     raise NotImplemented('The platform %s is not supported yet' % sys.platform)
 
 
-def readkey(getchar_fn=None):
+def getkey(getchar_fn=None):
     getchar = getchar_fn or readchar
     buffer = getchar(True)
 

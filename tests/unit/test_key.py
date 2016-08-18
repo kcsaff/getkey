@@ -1,6 +1,6 @@
 import unittest
 
-from readchar import key
+from getkey import key
 
 
 class KeyTest(unittest.TestCase):

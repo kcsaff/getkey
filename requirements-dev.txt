@@ -1,10 +1,9 @@
---index-url https://pypi.python.org/simple/
+# --index-url https://pypi.python.org/simple/
 
--e .
+# -e .
 
 flake8   >= 2.4.0
 pep8     == 1.5.7
-flakes   >= 0.1.9
 doublex  >= 1.8.1
 pexpect  >= 3.3
 coverage >=3.7.1,<4.0a1
