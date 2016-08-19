@@ -46,6 +46,74 @@ ASCII_NAMES = {
 }
 
 
+class JargonKeys(object):
+    BANG = '!'
+    SHRIEK = '!'
+    DOUBLE_QUOTE = '"'
+    QUOTE = '"'
+    NUMBER_SIGN = '#'
+    SHARP = '#'
+    OCTOTHORPE = '#'
+    BUCK = '$'
+    CASH = '$'
+    STRING = '$'
+    MOD = '%'
+    GRAPES = '%'
+    AMPERSAND = '&'
+    AMP = '&'
+    AND_SIGN = '&'
+    APOSTROPHE = '\''
+    PRIME = '\''
+    TICK = '\''
+    STAR = '*'
+    SPLAT = '*'
+    GLOB = '*'
+
+
+class IntercalKeys(object):
+    SPOT = '.'
+    TWO_SPOT = ':'
+    TAIL = ','
+    HYBRID = ';'
+    MESH = '#'
+    HALF_MESH = '='
+    SPARK = '\''
+    BACKSPARK = '`'
+    WOW = '!'
+    WHAT = '?'
+    RABBIT_EARS = '"'
+    # RABBIT is `"` over `.`
+    SPIKE = '|'
+    DOUBLE_OH_SEVEN = '%'
+    WORM = '-'
+    ANGLE = '<'
+    RIGHT_ANGLE = '>'
+    WAX = '('
+    WANE = ')'
+    U_TURN = '['
+    U_TURN_BACK = ']'
+    EMBRACE = '{'
+    BRACELET = '}'
+    SPLAT = '*'
+    AMPERSAND = '&'
+    V = 'V'
+    BOOK = 'V'
+    # BOOKWORM is `-` over `V`
+    BIG_MONEY = '$'
+    # CHANGE is cent sign
+    SQUIGGLE = '~'
+    FLAT_WORM = '_'
+    # OVERLINE is line on top
+    INTERSECTION = '+'
+    SLAT = '/'
+    BACKSLAT = '\\'
+    WHIRLPOOL = '@'
+    # HOOKWORK is logical NOT symbol
+    SHARK = '^'
+    SHARKFIN = '^'
+    # BLOTCH is several characters smashed on top of each other
+
+
 class UnixKeys(object):
 
     ESC = '\x1b'
