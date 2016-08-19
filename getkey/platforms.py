@@ -2,68 +2,76 @@
 # Initially taken from:
 # http://code.activestate.com/recipes/134892/
 # Thanks to Danny Yoo
+
+from __future__ import absolute_import, print_function
 import os
 import sys
-from abc import ABCMeta, abstractmethod
-from .keys import Key
+from .keys import PLATFORM_KEYS
 
 
 class Platform(object):
-    __metaclass__ = ABCMeta
+    def __init__(self, keys, interrupts=None):
+        keys = keys or self.KEYS
 
-    def __init__(self, codes):
-        codes = codes or self.CODES
-        if isinstance(codes, str):
-            codes = _make_codes(codes)
-        self.codes = codes
-        self.escapes = _make_escapes(self.codes)
+        if isinstance(keys, str):
+            keys = PLATFORM_KEYS[keys]
+        self.keys = keys
+        self.interrupts = interrupts or self.INTERRUPTS
+
+        assert(
+            self.__class__.getchar != Platform.getchar or \
+            self.__class__.getchars != Platform.getchars
+        )
+
+    @property
+    def key(self):
+        return self.keys
 
     def getkey(self, blocking=True):
-        buffer = self.getchar(blocking)
-        if not buffer:
-            return ''
-
-        while True:
-            if buffer not in self.escapes:
-                break
-            c = self.getchar(False)
-            if not c:
-                break
+        buffer = ''
+        for c in self.getchars(blocking):
             buffer += c
+            if buffer not in self.keys.escapes:
+                break
 
-        if buffer in self.codes:
-            return self.codes[buffer]
-        else:
-            return Key.get(buffer)
+        keycode = self.keys.canon(buffer)
+        if keycode in self.interrupts:
+            interrupt = self.interrupts[keycode]
+            if isinstance(interrupt, BaseException) or \
+                issubclass(interrupt, BaseException):
+                raise interrupt
+            else:
+                raise NotImplementedError('Unimplemented interrupt: {!r}'
+                                          .format(interrupt))
+        return keycode
 
-    @abstractmethod
+    # You MUST override at least one of the following
+    def getchars(self, blocking=True):
+        char = self.getchar(blocking)
+        while char:
+            yield char
+            char = self.getchar(False)
+
     def getchar(self, blocking=True):
-        raise NotImplementedError
+        for char in self.getchars(blocking):
+            return char
+        else:
+            return None
 
-
-def _make_codes(name):
-    codes = dict()
-    for key in Key.all_defined():
-        keycodes = getattr(key, name) or ()
-        for keycode in keycodes:
-            codes[keycode] = key
-    return codes
-
-
-def _make_escapes(codes):
-    escapes = set()
-    for code in codes:
-        for i in range(len(code)):
-            escapes.add(code[:i])
-    return escapes
+    def bang(self):
+        while True:
+            code = self.getkey(True)
+            name = self.keys.name(code) or '???'
+            print('{} = {!r}'.format(name, code))
 
 
 class PlatformUnix(Platform):
-    CODES = 'unix'
+    KEYS = 'unix'
+    INTERRUPTS = {'CTRL_C': KeyboardInterrupt}
 
-    def __init__(self, codes=None, stdin=sys.stdin, select=None, tty=None, termios=None):
-        super(PlatformUnix, self).__init__(codes)
-        self.stdin = stdin
+    def __init__(self, keys=None, stdin=None, select=None, tty=None, termios=None):
+        super(PlatformUnix, self).__init__(keys)
+        self.stdin = stdin or sys.stdin
         if not select:
             from select import select
         if not tty:
@@ -74,22 +82,26 @@ class PlatformUnix(Platform):
         self.tty = tty
         self.termios = termios
 
-    def getchar(self, blocking=True):
+    def getchars(self, blocking=True):
         old_settings = self.termios.tcgetattr(self.stdin)
         self.tty.setcbreak(self.stdin.fileno())
         try:
-            if blocking or self.select([self.stdin, ], [], [], 0.0)[0]:
-                char = os.read(self.stdin.fileno(), 1)
-                return char if type(char) is str else char.decode()
+            if blocking:
+                yield os.read(self.stdin.fileno(), 1)
+            while self.select([self.stdin], [], [], 0)[0]:
+                yield os.read(self.stdin.fileno(), 1)
         finally:
-            self.tcsetattr(sys.stdin, self.termios.TCSADRAIN, old_settings)
+            self.termios.tcsetattr(
+                self.stdin, self.termios.TCSADRAIN, old_settings
+            )
 
 
 class PlatformWindows(Platform):
-    CODES = 'windows'
+    KEYS = 'windows'
+    INTERRUPTS = {'CTRL_C': KeyboardInterrupt}
 
-    def __init__(self, codes=None, msvcrt=None):
-        super(PlatformWindows, self).__init__(codes)
+    def __init__(self, keys=None, msvcrt=None):
+        super(PlatformWindows, self).__init__(keys)
         if msvcrt is None:
             import msvcrt
         self.msvcrt = msvcrt
@@ -107,10 +119,11 @@ class PlatformWindows(Platform):
 
 
 class PlatformTest(Platform):
-    CODES = 'unix'
+    KEYS = 'unix'
+    INTERRUPTS = {'CTRL_C': KeyboardInterrupt}
 
-    def __init__(self, chars, codes=None):
-        super(PlatformTest, self).__init__(codes)
+    def __init__(self, chars, keys=None):
+        super(PlatformTest, self).__init__(keys)
         self.chars = chars
         self.index = 0
 
@@ -132,11 +145,11 @@ PLATFORMS = [
 ]
 
 
-def platform(name=None, codes=None):
+def platform(name=None, keys=None, interrupts=None):
     name = name or sys.platform
     for prefix, ctor in PLATFORMS:
         if name.startswith(prefix):
-            return ctor(codes=codes)
+            return ctor(keys=keys)
     else:
         raise NotImplementedError('Unknown platform {!r}'.format(name))
 

@@ -3,7 +3,7 @@
 import sys
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
-from readchar import __version__
+from getkey import __version__
 
 
 def read_description():
@@ -31,7 +31,7 @@ class PyTest(TestCommand):
 
 
 setup(
-    name='readchar',
+    name='getkey',
     version=__version__,
     description="Utilities to read single characters and key-strokes",
     long_description=read_description(),

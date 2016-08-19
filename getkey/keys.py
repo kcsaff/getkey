@@ -5,12 +5,20 @@ import string
 
 
 ASCII_NAMES = {
+    '\t': 'tab',
+
     ' ': 'space',                # 0x20
     '!': 'exclamation',          # 0x21
     '"': 'double quote',         # 0x22
     '#': 'hash',                 # 0x23
     '$': 'dollar',               # 0x24
-
+    '%': 'percent',              # 0x25
+    '&': 'ampersand',            # 0x26
+    '\'': 'single quote',        # 0x27
+    '(': 'open paren',           # 0x28
+    ')': 'close paren',          # 0x29
+    '*': 'asterisk',             # 0x2a
+    '+': 'plus',                 # 0x2b
     ',': 'comma',                # 0x2c
     '-': 'minus',                # 0x2d
     '.': 'period',               # 0x2e
@@ -39,6 +47,9 @@ ASCII_NAMES = {
 
 
 class UnixKeys(object):
+
+    ESC = '\x1b'
+
     UP = '\x1b[A'
     DOWN = '\x1b[B'
     RIGHT = '\x1b[C'
@@ -46,27 +57,28 @@ class UnixKeys(object):
     ENTER = '\n'
     CR = '\r'
     BACKSPACE = '\x7f'
-    DELETE = '\x1b[3~'
 
     SPACE = ' '
 
-    F1 = '\x1b\x4f\x50'
-    F2 = '\x1b\x4f\x51'
-    F3 = '\x1b\x4f\x52'
-    F4 = '\x1b\x4f\x53'
-    F5 = '\x1b\x4f\x31\x35~'
-    F6 = '\x1b\x4f\x31\x37~'
-    F7 = '\x1b\x4f\x31\x38~'
-    F8 = '\x1b\x4f\x31\x39~'
-    F9 = '\x1b\x4f\x32\x30~'
-    F10 = '\x1b\x4f\x32\x31~'
-    F11 = '\x1b\x4f\x32\x33~'
-    F12 = '\x1b\x4f\x32\x34~'
-
-    ESC = '\x1b'
+    F1 = '\x1bOP'
+    F2 = '\x1bOQ'
+    F3 = '\x1bOR'
+    F4 = '\x1bOS'
+    F5 = '\x1b\x4f15~'
+    F6 = '\x1b\x4f17~'
+    F7 = '\x1b\x4f18~'
+    F8 = '\x1b\x4f19~'
+    F9 = '\x1b\x4f20~'
+    F10 = '\x1b\x4f21~'
+    F11 = '\x1b\x4f23~'
+    F12 = '\x1b\x4f24~'
 
     INSERT = '\x1b[2~'
-    SUPR = '\x1b[3~'
+    DELETE = '\x1b[3~'
+    HOME = '\x1b[H'
+    END = '\x1b[F'
+    PAGE_UP = '\x1b[5'
+    PAGE_DOWN = '\x1b[6'
 
 
 class UnixControlKeys(object):
@@ -76,7 +88,7 @@ class UnixControlKeys(object):
             high_char = chr(i + 0x40)
             name = ASCII_NAMES.get(high_char, high_char).upper()
             ctrl_name = format.format(name)
-            setattr(ctrl_name, low_char)
+            setattr(self, ctrl_name, low_char)
 
 
 class AsciiKeys(object):
@@ -118,7 +130,7 @@ class Keys(object):
         if code not in self.__names:
             self.__names[code] = name
         for i in range(len(code)):
-            self.__escapes.update(code[:i])
+            self.__escapes.add(code[:i])
 
         # Update towards canonicity
         while True:
@@ -136,8 +148,13 @@ class Keys(object):
             else:
                 break
 
+    @property
     def escapes(self):
         return self.__escapes
+
+    @property
+    def names(self):
+        return self.__codes.keys()
 
     def name(self, code):
         return self.__names.get(code)
@@ -146,7 +163,8 @@ class Keys(object):
         return self.__codes.get(name)
 
     def canon(self, code):
-        return self.code(self.name(code))
+        name = self.name(code)
+        return self.code(name) if name else code
 
     def __getattr__(self, name):
         code = self.code(name)
@@ -167,8 +185,14 @@ def _make_escapes(codes):
     return escapes
 
 
-unix = Keys([UnixKeys(), UnixControlKeys(), AsciiKeys()])
-windows = unix  # This is wrong, rite?
+unix_keys = Keys([UnixKeys(), AsciiKeys(), UnixControlKeys()])
+windows_keys = unix_keys  # This is wrong, rite?
+
+
+PLATFORM_KEYS = {
+    'unix': unix_keys,
+    'windows': windows_keys,
+}
 
 
 # ALT
