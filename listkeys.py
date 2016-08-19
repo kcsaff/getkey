@@ -17,11 +17,14 @@ def main():
         names.update(platform.names)
 
     items = list()
+    max_name_len = max(len(name) for name in names)
     for name in sorted(names):
         v = ''
+        codes = []
         for platform, char in PLATFORM_CHARS:
             keys = PLATFORM_KEYS[platform]
             code = keys.code(name)
+            codes.append(code)
             if code:
                 v += char
             else:
@@ -31,6 +34,14 @@ def main():
             else:
                 v += ' '
         v += ' ' + name
+        v += ' ' * (2 + max_name_len - len(name))
+
+        if len(set(codes)) == 1:
+            v += repr(codes[0])
+        else:
+            v += ', '.join('{}{!r}'.format(char, code)
+                           for code, (_, char) in zip(codes, PLATFORM_CHARS))
+
         items.append(v)
     print('\n'.join(items))
 

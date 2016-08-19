@@ -2,47 +2,48 @@
 # What chars to print (if any)
 # Keycode(s) generating event
 import string
+from .unikeys import UnicodeAsciiKeys
 
 
 ASCII_NAMES = {
     '\t': 'tab',
 
-    ' ': 'space',                # 0x20
-    '!': 'exclamation',          # 0x21
-    '"': 'double quote',         # 0x22
-    '#': 'hash',                 # 0x23
-    '$': 'dollar',               # 0x24
-    '%': 'percent',              # 0x25
-    '&': 'ampersand',            # 0x26
-    '\'': 'single quote',        # 0x27
-    '(': 'open paren',           # 0x28
-    ')': 'close paren',          # 0x29
-    '*': 'asterisk',             # 0x2a
-    '+': 'plus',                 # 0x2b
-    ',': 'comma',                # 0x2c
-    '-': 'minus',                # 0x2d
-    '.': 'period',               # 0x2e
-    '/': 'slash',                # 0x2f
+    ' ': 'space',          # 0x20
+    '!': 'exclamation',    # 0x21
+    '"': 'double quote',   # 0x22
+    '#': 'hash',           # 0x23
+    '$': 'dollar',         # 0x24
+    '%': 'percent',        # 0x25
+    '&': 'ampersand',      # 0x26
+    '\'': 'single quote',  # 0x27
+    '(': 'open paren',     # 0x28
+    ')': 'close paren',    # 0x29
+    '*': 'asterisk',       # 0x2a
+    '+': 'plus',           # 0x2b
+    ',': 'comma',          # 0x2c
+    '-': 'minus',          # 0x2d
+    '.': 'period',         # 0x2e
+    '/': 'slash',          # 0x2f
 
-    ':': 'colon',                # 0x3a
-    ';': 'semicolon',            # 0x3b
-    '<': 'less than',            # 0x3c
-    '=': 'equals',               # 0x3d
-    '>': 'greater than',         # 0x3e
-    '?': 'question',             # 0x3f
-    '@': 'at',                   # 0x40
+    ':': 'colon',          # 0x3a
+    ';': 'semicolon',      # 0x3b
+    '<': 'less than',      # 0x3c
+    '=': 'equals',         # 0x3d
+    '>': 'greater than',   # 0x3e
+    '?': 'question',       # 0x3f
+    '@': 'at',             # 0x40
 
-    '[': 'left bracket',         # 0x5b
-    '\\': 'backslash',           # 0x5c
-    ']': 'right bracket',        # 0x5d
-    '^': 'caret',                # 0x5e
-    '_': 'underscore',           # 0x5f
-    '`': 'backtick',             # 0x60
+    '[': 'left bracket',   # 0x5b
+    '\\': 'backslash',     # 0x5c
+    ']': 'right bracket',  # 0x5d
+    '^': 'caret',          # 0x5e
+    '_': 'underscore',     # 0x5f
+    '`': 'backtick',       # 0x60
 
-    '{': 'left curly bracket',   # 0x7b
-    '|': 'pipe',                 # 0x7c
-    '}': 'right curly bracket',  # 0x7d
-    '~': 'tilde',                # 0x7e
+    '{': 'left brace',     # 0x7b
+    '|': 'pipe',           # 0x7c
+    '}': 'right brace',    # 0x7d
+    '~': 'tilde',          # 0x7e
 }
 
 
@@ -68,6 +69,14 @@ class JargonKeys(object):
     STAR = '*'
     SPLAT = '*'
     GLOB = '*'
+    ADD = '+'
+
+
+class UnicodeKeys(object):
+    # Names from ftp://ftp.unicode.org/Public/UNIDATA/NamesList.txt
+    NULL = chr(0x00)
+    START_OF_HEADING = chr(0x01)
+
 
 
 class IntercalKeys(object):
@@ -253,7 +262,7 @@ def _make_escapes(codes):
     return escapes
 
 
-unix_keys = Keys([UnixKeys(), AsciiKeys(), UnixControlKeys()])
+unix_keys = Keys([UnixKeys(), AsciiKeys(), UnixControlKeys(), UnicodeAsciiKeys(), JargonKeys(), IntercalKeys()])
 windows_keys = unix_keys  # This is wrong, rite?
 
 
