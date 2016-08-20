@@ -17,6 +17,8 @@ class Platform(object):
             keys = PLATFORM_KEYS[keys]
         self.keys = keys
         self.interrupts = interrupts or self.INTERRUPTS
+	self.interrupts = {self.keys.code(name): action
+			   for name, action in self.interrupts.items()}
 
         assert(
             self.__class__.getchar != Platform.getchar or \
@@ -106,16 +108,13 @@ class PlatformWindows(Platform):
             import msvcrt
         self.msvcrt = msvcrt
 
-    def getchar(self, blocking=True):
+    def getchars(self, blocking=True):
         """Get a single character on Windows."""
 
+        if blocking:
+            yield self.msvcrt.getch()
         while self.msvcrt.kbhit():
-            self.msvcrt.getch()
-        ch = self.msvcrt.getch()
-        while ch in '\x00\xe0':
-            self.msvcrt.getch()
-            ch = self.msvcrt.getch()
-        return ch.decode()
+            yield self.msvcrt.getch()
 
 
 class PlatformTest(Platform):

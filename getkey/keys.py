@@ -158,7 +158,132 @@ class UnixKeys(object):
     PAGE_DOWN = '\x1b[6'
 
 
-class UnixControlKeys(object):
+class WindowsKeys(object):
+    ESC = '\x1b'
+
+    LEFT = '\xe0K'
+    RIGHT = '\xe0M'
+    UP = '\xe0H'
+    DOWN = '\xe0P'
+    
+    ENTER = '\r'
+    BACKSPACE = '\x08'
+    SPACE = ' '
+
+    F1 = '\x00;'
+    F2 = '\x00<'
+    F3 = '\x00='
+    F4 = '\x00>'
+    F5 = '\x00?'
+    F6 = '\x00@'
+    F7 = '\x00A'
+    F8 = '\x00B'
+    F9 = '\x00C'
+    F10 = '\x00D'
+    F11 = '\xe0\x85'
+    F12 = '\xe0\x86'
+
+    INSERT = '\xe0R'
+    DELETE = '\xe0S'
+    PAGE_UP = '\xe0I'
+    PAGE_DOWN = '\xe0Q'
+    HOME = '\xe0G'
+    END = '\xe0O'
+
+    CTRL_F1 = '\x00^'
+    CTRL_F2 = '\x00_'
+    CTRL_F3 = '\x00`'
+    CTRL_F4 = '\x00a'
+    CTRL_F5 = '\x00b'
+    CTRL_F6 = '\x00c'
+    CTRL_F7 = '\x00d'  # Captured by something?
+    CTRL_F8 = '\x00e'
+    CTRL_F9 = '\x00f'
+    CTRL_F10 = '\x00g'
+    CTRL_F11 = '\xe0\x89'
+    CTRL_F12 = '\xe0\x8a'
+
+    CTRL_HOME = '\xe0w'
+    CTRL_END = '\xe0u'
+    CTRL_INSERT = '\xe0\x92'
+    CTRL_DELETE = '\xe0\x93'
+    CTRL_PAGE_DOWN = '\xe0v'
+
+    CTRL_2 = '\x00\x03'
+    CTRL_UP = '\xe0\x8d'
+    CTRL_DOWN = '\xe0\x91'
+    CTRL_LEFT = '\xe0s'
+    CTRL_RIGHT = '\xe0t'
+
+    CTRL_ALT_A = '\x00\x1e'
+    CTRL_ALT_B = '\x000'
+    CTRL_ALT_C = '\x00.'
+    CTRL_ALT_D = '\x00 '
+    CTRL_ALT_E = '\x00\x12'
+    CTRL_ALT_F = '\x00!'
+    CTRL_ALT_G = '\x00"'
+    CTRL_ALT_H = '\x00#'
+    CTRL_ALT_I = '\x00\x17'
+    CTRL_ALT_J = '\x00$'
+    CTRL_ALT_K = '\x00%'
+    CTRL_ALT_L = '\x00&'
+    CTRL_ALT_M = '\x002'
+    CTRL_ALT_N = '\x001'
+    CTRL_ALT_O = '\x00\x18'
+    CTRL_ALT_P = '\x00\x19'
+    CTRL_ALT_Q = '\x00\x10'
+    CTRL_ALT_R = '\x00\x13'
+    CTRL_ALT_S = '\x00\x1f'
+    CTRL_ALT_T = '\x00\x14'
+    CTRL_ALT_U = '\x00\x16'
+    CTRL_ALT_V = '\x00/'
+    CTRL_ALT_W = '\x00\x11'
+    CTRL_ALT_X = '\x00-'
+    CTRL_ALT_Y = '\x00\x15'
+    CTRL_ALT_Z = '\x00,'
+    CTRL_ALT_1 = '\x00x'
+    CTRL_ALT_2 = '\x00y'
+    CTRL_ALT_3 = '\x00z'
+    CTRL_ALT_4 = '\x00{'
+    CTRL_ALT_5 = '\x00|'
+    CTRL_ALT_6 = '\x00}'
+    CTRL_ALT_7 = '\x00~'
+    CTRL_ALT_8 = '\x00\x7f'
+    CTRL_ALT_9 = '\x00\x80'
+    CTRL_ALT_0 = '\x00\x81'
+    CTRL_ALT_MINUS = '\x00\x82'
+    CTRL_ALT_EQUALS = '\x00x83'
+    CTRL_ALT_BACKSPACE = '\x00\x0e'
+
+    CTRL_ALT_F1 = '\x00h'
+    CTRL_ALT_F2 = '\x00i'
+    CTRL_ALT_F3 = '\x00j'
+    CTRL_ALT_F4 = '\x00k'
+    CTRL_ALT_F5 = '\x00l'
+    CTRL_ALT_F6 = '\x00m'
+    CTRL_ALT_F7 = '\x00n'
+    CTRL_ALT_F8 = '\x00o'
+    CTRL_ALT_F9 = '\x00p'
+    CTRL_ALT_F10 = '\x00q'
+    CTRL_ALT_HOME = '\x00\x97'
+    CTRL_ALT_END = '\x00\x9f'
+    CTRL_ALT_INSERT = '\x00\xa2'
+    CTRL_ALT_LEFT_BRACKET = '\x00\x1a'
+    CTRL_ALT_RIGHT_BRACKET = '\x00\x1b'
+    CTRL_ALT_SEMICOLON = '\x00\''
+    CTRL_ALT_SINGLE_QUOTE = '\x00('
+    CTRL_ALT_ENTER = '\x00\x1c'
+    CTRL_ALT_SLASH = '\x005'
+    CTRL_ALT_PERIOD = '\x004'
+    CTRL_ALT_COMMA = '\x003'
+    CTRL_ALT_PAGE_UP = '\x00\x99'
+    CTRL_ALT_PAGE_DOWN = '\x00\xa1'
+
+
+
+
+
+class ControlKeys(object):
     def __init__(self, format='CTRL_{}'):
         for i in range(0x20):
             low_char = chr(i)
@@ -262,23 +387,14 @@ def _make_escapes(codes):
     return escapes
 
 
-unix_keys = Keys([UnixKeys(), AsciiKeys(), UnixControlKeys(), UnicodeAsciiKeys(), JargonKeys(), IntercalKeys()])
-windows_keys = unix_keys  # This is wrong, rite?
+unix_keys = Keys([UnixKeys(), AsciiKeys(), ControlKeys(), UnicodeAsciiKeys(), JargonKeys(), IntercalKeys()])
+windows_keys = Keys([WindowsKeys(), AsciiKeys(), ControlKeys(), UnicodeAsciiKeys(), JargonKeys(), IntercalKeys()])
 
 
 PLATFORM_KEYS = {
     'unix': unix_keys,
     'windows': windows_keys,
 }
-
-
-# ALT
-ALT_A = '\x1b\x61'
-
-# CTRL + ALT
-CTRL_ALT_A = '\x1b\x01'
-
-CTRL_ALT_SUPR = '\x1b\x5b\x33\x5e'
 
 
 

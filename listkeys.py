@@ -40,7 +40,9 @@ def main():
             v += repr(codes[0])
         else:
             v += ', '.join('{}{!r}'.format(char, code)
-                           for code, (_, char) in zip(codes, PLATFORM_CHARS))
+                           for code, (_, char) in zip(codes, PLATFORM_CHARS)
+			   if code
+			   )
 
         items.append(v)
     print('\n'.join(items))
