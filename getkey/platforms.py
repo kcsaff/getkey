@@ -24,7 +24,7 @@ class Platform(object):
         }
 
         assert(
-            self.__class__.getchar != Platform.getchar or \
+            self.__class__.getchar != Platform.getchar or
             self.__class__.getchars != Platform.getchars
         )
 
