@@ -9,4 +9,4 @@ bang = __platform.bang
 
 # __all__ = [getkey, key, bang, platform]
 
-__version__ = '0.5.0'
+__version__ = '0.6'
