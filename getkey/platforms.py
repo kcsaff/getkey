@@ -6,7 +6,7 @@
 from __future__ import absolute_import, print_function
 import os
 import sys
-from .keys import PLATFORM_KEYS
+from .keynames import PLATFORM_KEYS
 
 
 class Platform(object):
@@ -16,9 +16,12 @@ class Platform(object):
         if isinstance(keys, str):
             keys = PLATFORM_KEYS[keys]
         self.keys = keys
-        self.interrupts = interrupts or self.INTERRUPTS
-	self.interrupts = {self.keys.code(name): action
-			   for name, action in self.interrupts.items()}
+        if interrupts is None:
+            interrupts = self.INTERRUPTS
+        self.interrupts = {
+            self.keys.code(name): action
+            for name, action in interrupts.items()
+        }
 
         assert(
             self.__class__.getchar != Platform.getchar or \
@@ -85,6 +88,8 @@ class PlatformUnix(Platform):
         self.termios = termios
 
     def getchars(self, blocking=True):
+        """Get characters on Unix."""
+
         old_settings = self.termios.tcgetattr(self.stdin)
         self.tty.setcbreak(self.stdin.fileno())
         try:
@@ -109,7 +114,7 @@ class PlatformWindows(Platform):
         self.msvcrt = msvcrt
 
     def getchars(self, blocking=True):
-        """Get a single character on Windows."""
+        """Get characters on Windows."""
 
         if blocking:
             yield self.msvcrt.getch()

@@ -1,0 +1,5 @@
+# List of {} key names defined by getkey.
+# The columns `u` and `w` indicate whether these key names are available on
+# Unix (& Linux & Mac) or Windows, respectively.  The asterisk to the right
+# of each indicates if the listed code(s) is canonical on that platform,
+# i.e. that key.name(code) would return that name.

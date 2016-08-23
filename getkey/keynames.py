@@ -324,7 +324,7 @@ class AsciiKeys(object):
 class Keys(object):
     def __init__(self, keyclasses):
         self.__names = dict()  # Map of codes -> names
-        self.__codes = dict()  # Map of names -> codes (can be updated towards canonicity)
+        self.__codes = dict()  # Map of names -> codes
 
         self.__escapes = set()
 
@@ -395,8 +395,10 @@ def _make_escapes(codes):
     return escapes
 
 
-unix_keys = Keys([UnixKeys(), AsciiKeys(), ControlKeys(), UnicodeAsciiKeys(), JargonKeys(), IntercalKeys()])
-windows_keys = Keys([WindowsKeys(), AsciiKeys(), ControlKeys(), UnicodeAsciiKeys(), JargonKeys(), IntercalKeys()])
+unix_keys = Keys([UnixKeys(), AsciiKeys(), ControlKeys(),
+                  UnicodeAsciiKeys(), JargonKeys(), IntercalKeys()])
+windows_keys = Keys([WindowsKeys(), AsciiKeys(), ControlKeys(),
+                     UnicodeAsciiKeys(), JargonKeys(), IntercalKeys()])
 
 
 PLATFORM_KEYS = {

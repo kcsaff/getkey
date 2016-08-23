@@ -1,9 +1,16 @@
+# Script used to generate getkey/unikeys.py
+
+from __future__ import absolute_import, print_function
+import sys
+sys.path.insert(0, '..')
 try:
     from urllib2 import urlopen
 except ImportError:
     from urllib.request import urlopen
+import argparse
 import string
 import itertools
+
 
 UNIDATA = 'ftp://ftp.unicode.org/Public/UNIDATA/NamesList.txt'
 
@@ -55,8 +62,13 @@ def main():
     text = response.read()
     print('class UnicodeAsciiKeys(object):')
     for name, char in parse_unicode_names(text):
-        print '    {} = {!r}'.format(name, char)
+        print('    {} = {!r}'.format(name, char))
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(
+        description=
+        '''Parse unicode names & write as `UnicodeAsciiKeys` class.'''
+    )
+    parser.parse_args()
     main()

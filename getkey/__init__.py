@@ -6,6 +6,6 @@ getkey = __platform.getkey
 key = __platform.key
 bang = __platform.bang
 
-__all__ = [getkey, key, bang, platform]
+# __all__ = [getkey, key, bang, platform]
 
-__version__ = '1.1.1'
+__version__ = '0.5.0'
