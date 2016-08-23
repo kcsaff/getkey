@@ -60,7 +60,7 @@ Installation
 
    pip install getkey
 
-The :code:`getkey` library is compatible with python 2.6, 2.7, 3.2 and 3.3.
+The :code:`getkey` library is compatible with python 2.7, and 3.2+.
 
 Usage
 -----
