@@ -11,12 +11,41 @@ VERSION         DOWNLOADS        TESTS      COVERAGE
 
 Library to easily read single chars and key strokes.
 
-Goal and Philosophy
-===================
+History
+=======
 
-Born as a `python-inquirer`_ requirement.
 
-The idea is to have a portable way to read **single** characters and **key-strokes**.
+This library seems to have started as a gist by Danny Yoo & made the rounds in
+various versions until Miguel Ángel García turned it into a portable package
+for their `python-inquirer`_ project.  Then K.C.Saff forked it & smashed it
+into this new form for their own command line input library.
+
+
+Philosophy
+==========
+
+
+Keys will be returned as strings representing the received key codes, however
+as some keys may have multiple possible codes on a platform, the key code will
+be canonicalized so you can test `key == keys.UP` instead of `key in keys.UP`.
+This means non-control keys will be returned just as the text they represent,
+and you can just as easily test `key == 'a'` to see if the user pressed `a`.
+
+In addition, by default we will throw `KeyboardInterrupt` for `Ctrl-C` which
+would otherwise be suppressed.  However, it is possible to disable this if you
+wish:
+
+.. code:: python
+
+  from getkey import plaform
+  my_platform = platform(interrupts={})
+  my_getkey = my_platform.getkey
+
+
+Now `my_getkey` will be a function returning keys that won't throw on `Ctrl-C`.
+Warning!  This may make it difficult to exit a running script.
+
+
 
 
 Documentation
@@ -27,9 +56,9 @@ Installation
 
 ::
 
-   pip install readchar
+   pip install getkey
 
-The :code:`readchar` library is compatible with python 2.6, 2.7, 3.2 and 3.3.
+The :code:`getkey` library is compatible with python 2.6, 2.7, 3.2 and 3.3.
 
 Usage
 -----
@@ -38,48 +67,74 @@ Usage example:
 
 .. code:: python
 
-  import readchar
+  from getkey import getkey, keys
+  key = getkey()
+  if key == keys.UP:
+    ...  # Handle the UP key
+  elif key == keys.DOWN:
+    ...  # Handle the DOWN key
+  ... # Handle all other desired control keys
+  else:  # Handle text characters
+    buffer += key
+    print(buffer)
 
-  c = readchar.readchar()
-  key = readchar.readkey()
+
+Please consult `tools/keys.txt` for a full list of key names available on
+different platforms, or `tools/controls.txt` for the abridged version just
+containing control (normally non-printing) characters.
 
 API
 ----
 
-There are just two methods:
+There is one primary method:
 
-:code:`readchar()`
+:code:`getkey(blocking=True)`
 //////////////////
-
-Reads the next char from :code:`stdin`, returning it as a string with length 1.
-
-
-:code:`readkey()`
-/////////////////
 
 Reads the next key-stroke from :code:`stdin`, returning it as an string.
 
 A key-stroke can have:
 
 - 1 character for normal keys: 'a', 'z', '9'...
-- 2 characters for combinations with ALT: ALT+A, ...
-- 3 characters for cursors: ->, <-, ...
-- 4 characters for combinations with CTRL and ALT: CTRL+ALT+SUPR, ...
+- 1 character for certain control combinations: '\x01' as Ctrl-A, for example
+- more for other control keys (system dependent, but with portable names)
+- check `tools/keys.txt` for a list of keys available on different systems.
 
-There is a list of previously captured chars with their names in :code:`readchar.key`, in order to be used in comparations and so on. This list is not enough tested and it can have mistakes, so use it carefully. Please, report them if found.
+Interpreting the keycode response is made easier with the `keys` object:
+
+:code:`keys`
+/////////////////
+
+Contains portable names for keys, so that `keys.UP` will mean the up
+key on both Linux or Windows, even though the actual key codes are
+different.
+
+Because the list of key names is generated dynamically, please consult
+`tools/keys.txt` for a full list of key names.  It is not necessary to
+use key names for single characters: if the user pushes `a` the key returned
+is very portably just that single character `a` itself.
+
+:code:`keys.name(code)`
+/////////////////
+
+Returns the canonical name of the key which yields this key code on this
+platform.  One key code may have multiple aliases, but only the canonical
+name will be returned.  The canonical names are marked with an
+asterisk in `tools/keys.txt`.
 
 
-SO Support
+OS Support
 ----------
 
-Sadly, this library has only being probed on GNU/Linux. Please, if you can try it in another SO and find a bug, put an issue or send the pull-request.
-
-Thank you!
+This library has been tested on both Mac & Windows, & the Mac keys should work
+much the same on Linux.  If planning to use more esoteric control keys,
+please verify compatibility by checking
 
 How to contribute
 =================
 
-You can download the code, make some changes with their tests, and make a pull-request.
+You can download the code, make some changes with their tests, and make a
+pull-request.
 
 In order to develop or running the tests, you can do:
 
@@ -87,7 +142,7 @@ In order to develop or running the tests, you can do:
 
 .. code:: bash
 
-   git clone https://github.com/magmax/python-readchar.git
+   git clone https://github.com/kcsaff/getkey.git
 
 2. Create a virtual environment:
 
@@ -122,6 +177,8 @@ License
 
 Copyright (c) 2014, 2015 Miguel Ángel García (`@magmax9`_).
 
+Copyright (c) 2016 K.C.Saff (`@kcsaff`_)
+
 Based on previous work on gist `getch()-like unbuffered character reading from stdin on both Windows and Unix (Python recipe)`_, started by `Danny Yoo`_.
 
 Licensed under `the MIT license`_.
@@ -143,12 +200,12 @@ Licensed under `the MIT license`_.
     :target: https://pypi.python.org/pypi/readchar
     :alt: Number of PyPI downloads
 
-.. _pypi: https://pypi.python.org/pypi/readchar
-.. _GitHub: https://github.com/magmax/python-readchar
-.. _python-inquirer: https://github.com/magmax/python-inquirer
-.. _Travis: https://travis-ci.org/magmax/python-readchar
+.. _pypi: https://pypi.python.org/pypi/getkey
+.. _GitHub: https://github.com/kcsaff/getkey
+.. _Travis: https://travis-ci.org/kcsaff/getkey
 .. _Coveralls: https://coveralls.io/r/magmax/python-readchar
 .. _@magmax9: https://twitter.com/magmax9
+.. _@kcsaff: https://twitter.com/kcsaff
 
 .. _the MIT license: http://opensource.org/licenses/MIT
 .. _getch()-like unbuffered character reading from stdin on both Windows and Unix (Python recipe): http://code.activestate.com/recipes/134892/

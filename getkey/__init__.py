@@ -3,7 +3,8 @@ from .platforms import platform
 
 __platform = platform()
 getkey = __platform.getkey
-key = __platform.key
+keys = __platform.keys
+key = keys  # alias
 bang = __platform.bang
 
 # __all__ = [getkey, key, bang, platform]

@@ -5,6 +5,7 @@ import string
 from .unikeys import UnicodeAsciiKeys
 
 
+# These are used for the names of ctrl keys, etc.
 ASCII_NAMES = {
     '\t': 'tab',
 
@@ -47,6 +48,12 @@ ASCII_NAMES = {
 }
 
 
+class UnicodeKeys(object):
+    # Names from ftp://ftp.unicode.org/Public/UNIDATA/NamesList.txt
+    NULL = chr(0x00)
+    START_OF_HEADING = chr(0x01)
+
+
 class JargonKeys(object):
     BANG = '!'
     SHRIEK = '!'
@@ -70,13 +77,6 @@ class JargonKeys(object):
     SPLAT = '*'
     GLOB = '*'
     ADD = '+'
-
-
-class UnicodeKeys(object):
-    # Names from ftp://ftp.unicode.org/Public/UNIDATA/NamesList.txt
-    NULL = chr(0x00)
-    START_OF_HEADING = chr(0x01)
-
 
 
 class IntercalKeys(object):
@@ -288,9 +288,6 @@ class WindowsKeys(object):
     CTRL_ALT_COMMA = '\x003'
 
 
-
-
-
 class ControlKeys(object):
     def __init__(self, format='CTRL_{}'):
         for i in range(0x20):
@@ -405,6 +402,3 @@ PLATFORM_KEYS = {
     'unix': unix_keys,
     'windows': windows_keys,
 }
-
-
-

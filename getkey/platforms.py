@@ -15,7 +15,7 @@ class Platform(object):
 
         if isinstance(keys, str):
             keys = PLATFORM_KEYS[keys]
-        self.keys = keys
+        self.key = self.keys = keys
         if interrupts is None:
             interrupts = self.INTERRUPTS
         self.interrupts = {
@@ -27,10 +27,6 @@ class Platform(object):
             self.__class__.getchar != Platform.getchar or \
             self.__class__.getchars != Platform.getchars
         )
-
-    @property
-    def key(self):
-        return self.keys
 
     def getkey(self, blocking=True):
         buffer = ''
@@ -74,8 +70,9 @@ class PlatformUnix(Platform):
     KEYS = 'unix'
     INTERRUPTS = {'CTRL_C': KeyboardInterrupt}
 
-    def __init__(self, keys=None, stdin=None, select=None, tty=None, termios=None):
-        super(PlatformUnix, self).__init__(keys)
+    def __init__(self, keys=None, interrupts=None,
+                 stdin=None, select=None, tty=None, termios=None):
+        super(PlatformUnix, self).__init__(keys, interrupts)
         self.stdin = stdin or sys.stdin
         if not select:
             from select import select
@@ -107,8 +104,8 @@ class PlatformWindows(Platform):
     KEYS = 'windows'
     INTERRUPTS = {'CTRL_C': KeyboardInterrupt}
 
-    def __init__(self, keys=None, msvcrt=None):
-        super(PlatformWindows, self).__init__(keys)
+    def __init__(self, keys=None, interrupts=None, msvcrt=None):
+        super(PlatformWindows, self).__init__(keys, interrupts)
         if msvcrt is None:
             import msvcrt
         self.msvcrt = msvcrt
@@ -124,10 +121,10 @@ class PlatformWindows(Platform):
 
 class PlatformTest(Platform):
     KEYS = 'unix'
-    INTERRUPTS = {'CTRL_C': KeyboardInterrupt}
+    INTERRUPTS = {}
 
-    def __init__(self, chars, keys=None):
-        super(PlatformTest, self).__init__(keys)
+    def __init__(self, chars='', keys=None, interrupts=None):
+        super(PlatformTest, self).__init__(keys, interrupts)
         self.chars = chars
         self.index = 0
 
@@ -145,7 +142,6 @@ PLATFORMS = [
     ('darwin', PlatformUnix),
     ('win32', PlatformWindows),
     ('cygwin', PlatformWindows),
-    ('test', PlatformTest),
 ]
 
 
@@ -153,7 +149,7 @@ def platform(name=None, keys=None, interrupts=None):
     name = name or sys.platform
     for prefix, ctor in PLATFORMS:
         if name.startswith(prefix):
-            return ctor(keys=keys)
+            return ctor(keys=keys, interrupts=interrupts)
     else:
         raise NotImplementedError('Unknown platform {!r}'.format(name))
 
