@@ -48,6 +48,13 @@ Now :code:`my_getkey` will be a function returning keys that won't throw on
 :code:`Ctrl-C`. Warning!  This may make it difficult to exit a running script.
 
 
+Plans
+=====
+
+
+This library will not hit 1.0 until we can verify it works correctly with
+unicode & international keyboards.  This is not yet tested.
+
 
 
 Documentation
