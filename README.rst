@@ -1,3 +1,4 @@
+
 See it at:
 
 - `pypi`_
@@ -27,13 +28,14 @@ Philosophy
 
 Keys will be returned as strings representing the received key codes, however
 as some keys may have multiple possible codes on a platform, the key code will
-be canonicalized so you can test `key == keys.UP` instead of `key in keys.UP`.
-This means non-control keys will be returned just as the text they represent,
-and you can just as easily test `key == 'a'` to see if the user pressed `a`.
+be canonicalized so you can test :code:`key == keys.UP` instead of
+:code:`key in keys.UP`. This means non-control keys will be returned just as
+the text they represent, and you can just as easily test :code:`key == 'a'` to
+see if the user pressed :code:`a`.
 
-In addition, by default we will throw `KeyboardInterrupt` for `Ctrl-C` which
-would otherwise be suppressed.  However, it is possible to disable this if you
-wish:
+In addition, by default we will throw :code:`KeyboardInterrupt` for
+:code:`Ctrl-C` which would otherwise be suppressed.  However, it is possible
+to disable this if you wish:
 
 .. code:: python
 
@@ -42,8 +44,8 @@ wish:
   my_getkey = my_platform.getkey
 
 
-Now `my_getkey` will be a function returning keys that won't throw on `Ctrl-C`.
-Warning!  This may make it difficult to exit a running script.
+Now :code:`my_getkey` will be a function returning keys that won't throw on
+:code:`Ctrl-C`. Warning!  This may make it difficult to exit a running script.
 
 
 
@@ -79,9 +81,9 @@ Usage example:
     print(buffer)
 
 
-Please consult `tools/keys.txt` for a full list of key names available on
-different platforms, or `tools/controls.txt` for the abridged version just
-containing control (normally non-printing) characters.
+Please consult :code:`tools/keys.txt` for a full list of key names available on
+different platforms, or :code:`tools/controls.txt` for the abridged version
+just containing control (normally non-printing) characters.
 
 API
 ----
@@ -89,7 +91,7 @@ API
 There is one primary method:
 
 :code:`getkey(blocking=True)`
-//////////////////
+/////////////////////////////
 
 Reads the next key-stroke from :code:`stdin`, returning it as an string.
 
@@ -98,29 +100,29 @@ A key-stroke can have:
 - 1 character for normal keys: 'a', 'z', '9'...
 - 1 character for certain control combinations: '\x01' as Ctrl-A, for example
 - more for other control keys (system dependent, but with portable names)
-- check `tools/keys.txt` for a list of keys available on different systems.
+- check :code:`tools/keys.txt` for keys available on different systems.
 
-Interpreting the keycode response is made easier with the `keys` object:
+Interpreting the keycode response is made easier with the :code:`keys` object:
 
 :code:`keys`
-/////////////////
+////////////
 
-Contains portable names for keys, so that `keys.UP` will mean the up
+Contains portable names for keys, so that :code:`keys.UP` will mean the up
 key on both Linux or Windows, even though the actual key codes are
 different.
 
 Because the list of key names is generated dynamically, please consult
-`tools/keys.txt` for a full list of key names.  It is not necessary to
+:code:`tools/keys.txt` for a full list of key names.  It is not necessary to
 use key names for single characters: if the user pushes `a` the key returned
 is very portably just that single character `a` itself.
 
 :code:`keys.name(code)`
-/////////////////
+///////////////////////
 
 Returns the canonical name of the key which yields this key code on this
 platform.  One key code may have multiple aliases, but only the canonical
 name will be returned.  The canonical names are marked with an
-asterisk in `tools/keys.txt`.
+asterisk in :code:`tools/keys.txt`.
 
 
 OS Support
@@ -184,20 +186,20 @@ Based on previous work on gist `getch()-like unbuffered character reading from s
 Licensed under `the MIT license`_.
 
 
-.. |travis| image:: https://travis-ci.org/magmax/python-readchar.png
+.. |travis| image:: https://travis-ci.org/kcsaff/getkey.png
   :target: `Travis`_
   :alt: Travis results
 
-.. |coveralls| image:: https://coveralls.io/repos/magmax/python-readchar/badge.png
+.. |coveralls| image:: https://coveralls.io/repos/kcsaff/getkey/badge.png
   :target: `Coveralls`_
   :alt: Coveralls results_
 
-.. |pip version| image:: https://pypip.in/v/readchar/badge.png
-    :target: https://pypi.python.org/pypi/readchar
+.. |pip version| image:: https://pypip.in/v/getkey/badge.png
+    :target: https://pypi.python.org/pypi/getkey
     :alt: Latest PyPI version
 
-.. |pip downloads| image:: https://pypip.in/d/readchar/badge.png
-    :target: https://pypi.python.org/pypi/readchar
+.. |pip downloads| image:: https://pypip.in/d/getkey/badge.png
+    :target: https://pypi.python.org/pypi/getkey
     :alt: Number of PyPI downloads
 
 .. _pypi: https://pypi.python.org/pypi/getkey
@@ -206,6 +208,7 @@ Licensed under `the MIT license`_.
 .. _Coveralls: https://coveralls.io/r/magmax/python-readchar
 .. _@magmax9: https://twitter.com/magmax9
 .. _@kcsaff: https://twitter.com/kcsaff
+.. _python-inquirer: https://github.com/magmax/python-inquirer
 
 .. _the MIT license: http://opensource.org/licenses/MIT
 .. _getch()-like unbuffered character reading from stdin on both Windows and Unix (Python recipe): http://code.activestate.com/recipes/134892/
