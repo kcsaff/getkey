@@ -1,34 +1,15 @@
 language: python
-
-sudo: false
-
 python:
   - "2.6"
   - "2.7"
   - "3.2"
   - "3.3"
   - "3.4"
+  # does not have headers provided, please ask https://launchpad.net/~pypy/+archive/ppa
+  # maintainers to fix their pypy-dev package.
   - "pypy"
-
-matrix:
-  include:
-    - python: "2.7"
-      env: TMODE=flake8
-env:
-    TMODE=test
-
+# command to install dependencies
 install:
-  - "if [[ $TMODE == 'test' ]]; then pip install pytest; fi"
-  - "if [[ $TMODE == 'test' ]]; then python setup.py install; fi"
-
-script:
-  - python setup.py $TMODE
-  - "if [[ $TMODE == 'test' ]]; then python setup.py sdist --formats zip,gztar bdist_wheel; fi"
-
-after_success:
-  - "if [[ $TMODE == 'test' ]]; then coveralls; fi"
-
-notifications:
-  email:
-    on_success: change
-    on_failure: change
+  - pip install -r requirements-dev.txt
+# command to run tests
+script: py.test tests
