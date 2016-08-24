@@ -165,11 +165,14 @@ class VT100ApplicationsModeKeys(object):
 
 
 class VT220Keys(object):
+    # F1-F5 didn't exist historically, but were added by later emulators
     F1 = '\x1b[11~'
     F2 = '\x1b[12~'
     F3 = '\x1b[13~'
     F4 = '\x1b[14~'
     F5 = '\x1b[15~'
+
+    # Historical keys
     F6 = '\x1b[17~'
     F7 = '\x1b[18~'
     F8 = '\x1b[19~'
@@ -177,6 +180,8 @@ class VT220Keys(object):
     F10 = '\x1b[21~'
     F11 = '\x1b[23~'
     F12 = '\x1b[24~'
+
+    # F13+ and key combinations to enter them are of limited usefulness today
 
 
 class UnixKeys(object):
@@ -198,7 +203,8 @@ class UnixKeys(object):
     DELETE = '\x1b[3~'
 
 
-class AlternativeUnixKeys(object):
+class AlternativeUnixFunctionKeys(object):
+    # Unsure origin: alternate V220 mode?
     F1 = '\x1bO11~'
     F2 = '\x1bO12~'
     F3 = '\x1bO13~'
@@ -447,14 +453,26 @@ def _make_escapes(codes):
     return escapes
 
 
-unix_keys = Keys([VT100StandardModeKeys(),
-                  VT100ApplicationsModeKeys(),
-		  VT220Keys(),
-                  UnixKeys(), AlternativeUnixKeys(),
-                  AsciiKeys(), ControlKeys(),
-                  UnicodeAsciiKeys(), JargonKeys(), IntercalKeys()])
-windows_keys = Keys([WindowsKeys(), AsciiKeys(), ControlKeys(),
-                     UnicodeAsciiKeys(), JargonKeys(), IntercalKeys()])
+unix_keys = Keys([
+    VT100StandardModeKeys(),
+    VT100ApplicationsModeKeys(),
+    VT220Keys(),
+    UnixKeys(),
+    AlternativeUnixFunctionKeys(),
+    AsciiKeys(),
+    ControlKeys(),
+    UnicodeAsciiKeys(),
+    JargonKeys(),
+    IntercalKeys()
+])
+windows_keys = Keys([
+    WindowsKeys(),
+    AsciiKeys(),
+    ControlKeys(),
+    UnicodeAsciiKeys(),
+    JargonKeys(),
+    IntercalKeys()
+])
 
 
 PLATFORM_KEYS = {
