@@ -187,11 +187,20 @@ class PlatformTest(Platform):
             return char
 
 
+def windows_or_unix(*args, **kwargs):
+    try:
+        import msvcrt
+    except ImportError:
+        return PlatformUnix(*args, **kwargs)
+    else:
+        return PlatformWindows(*args, **kwargs)
+
+
 PLATFORMS = [
     ('linux', PlatformUnix),
     ('darwin', PlatformUnix),
     ('win32', PlatformWindows),
-    ('cygwin', PlatformWindows),
+    ('cygwin', windows_or_unix),
 ]
 
 
