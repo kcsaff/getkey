@@ -100,16 +100,14 @@ class PlatformUnix(Platform):
         self.tty = tty
         self.termios = termios
 
-        self.__decoded_stream = OSReadWrapper(self.stdin)
+        try:
+            self.__decoded_stream = OSReadWrapper(self.stdin)
+        except Exception as err:
+            raise PlatformError('Cannot use unix platform on non-file-like stream')
 
     def getchars(self, blocking=True):
         """Get characters on Unix."""
-        try:
-            fd = self.__decoded_stream.fileno()
-        except Exception as err:
-            raise PlatformError(
-                'Cannot use unix platform on non-file-like stream'
-            )
+        fd = self.__decoded_stream.fileno()
 
         old_settings = self.termios.tcgetattr(fd)
         self.tty.setcbreak(fd)
