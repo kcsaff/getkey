@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import unittest
 
 from getkey.platforms import PlatformTest
@@ -12,7 +13,7 @@ def readchar_fn_factory(stream):
     return inner
 
 
-class ReadKeyTest(unittest.TestCase):
+class TestGetkey(unittest.TestCase):
     def test_basic_character(self):
         getkey = PlatformTest('a').getkey
         result = getkey()
@@ -50,3 +51,11 @@ class ReadKeyTest(unittest.TestCase):
         result = getkey()
 
         self.assertEqual(char, result)
+
+    def test_unicode_character(self):
+        text = u'Ángel'
+
+        getkey = PlatformTest(text).getkey
+        result = getkey()
+
+        self.assertEqual(u'Á', result)

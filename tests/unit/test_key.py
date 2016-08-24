@@ -3,7 +3,7 @@ import unittest
 from getkey.platforms import PlatformTest
 
 
-class KeyTest(unittest.TestCase):
+class TestKeys(unittest.TestCase):
     def test_character_length_1(self):
         key = PlatformTest().key
         self.assertEqual(1, len(key.CTRL_A))

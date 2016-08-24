@@ -3,7 +3,9 @@
 from __future__ import absolute_import, print_function
 import argparse
 import sys
-sys.path.insert(0, '..')
+import os.path
+sys.path.append(
+    os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
 from getkey import bang
 
 
