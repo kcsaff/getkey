@@ -164,6 +164,21 @@ class VT100ApplicationsModeKeys(object):
     KEYPAD_ENTER = '\x1bOM'
 
 
+class VT220Keys(object):
+    F1 = '\x1b[11~'
+    F2 = '\x1b[12~'
+    F3 = '\x1b[13~'
+    F4 = '\x1b[14~'
+    F5 = '\x1b[15~'
+    F6 = '\x1b[17~'
+    F7 = '\x1b[18~'
+    F8 = '\x1b[19~'
+    F9 = '\x1b[20~'
+    F10 = '\x1b[21~'
+    F11 = '\x1b[23~'
+    F12 = '\x1b[24~'
+
+
 class UnixKeys(object):
     # Keys found experimentally, of unknown provenance
     ESC = '\x1b'
@@ -179,20 +194,15 @@ class UnixKeys(object):
 
     SPACE = ' '
 
-    F5 = '\x1b[15~'
-    F6 = '\x1b[17~'
-    F7 = '\x1b[18~'
-    F8 = '\x1b[19~'
-    F9 = '\x1b[20~'
-    F10 = '\x1b[21~'
-    F11 = '\x1b[23~'
-    F12 = '\x1b[24~'
-
     INSERT = '\x1b[2~'
     DELETE = '\x1b[3~'
 
 
-class AlternativeUnixControls(object):
+class AlternativeUnixKeys(object):
+    F1 = '\x1bO11~'
+    F2 = '\x1bO12~'
+    F3 = '\x1bO13~'
+    F4 = '\x1bO14~'
     F5 = '\x1bO15~'
     F6 = '\x1bO17~'
     F7 = '\x1bO18~'
@@ -439,7 +449,8 @@ def _make_escapes(codes):
 
 unix_keys = Keys([VT100StandardModeKeys(),
                   VT100ApplicationsModeKeys(),
-                  UnixKeys(), AlternativeUnixControls(),
+		  VT220Keys(),
+                  UnixKeys(), AlternativeUnixKeys(),
                   AsciiKeys(), ControlKeys(),
                   UnicodeAsciiKeys(), JargonKeys(), IntercalKeys()])
 windows_keys = Keys([WindowsKeys(), AsciiKeys(), ControlKeys(),
