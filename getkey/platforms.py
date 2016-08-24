@@ -10,6 +10,10 @@ import sys
 from .keynames import PLATFORM_KEYS
 
 
+class PlatformError(Exception):
+    pass
+
+
 class Platform(object):
     def __init__(self, keys, interrupts=None):
         keys = keys or self.KEYS
@@ -100,7 +104,12 @@ class PlatformUnix(Platform):
 
     def getchars(self, blocking=True):
         """Get characters on Unix."""
-        fd = self.__decoded_stream.fileno()
+        try:
+            fd = self.__decoded_stream.fileno()
+        except Exception as err:
+            raise PlatformError(
+                'Cannot use unix platform on non-file-like stream'
+            )
 
         old_settings = self.termios.tcgetattr(fd)
         self.tty.setcbreak(fd)
