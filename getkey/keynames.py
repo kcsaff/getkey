@@ -123,39 +123,84 @@ class IntercalKeys(object):
     # BLOTCH is several characters smashed on top of each other
 
 
-class UnixKeys(object):
-
-    ESC = '\x1b'
+class VT100StandardModeKeys(object):
+    # http://www.braun-home.net/michael/mbedit/info/misc/VT100_commands.htm
+    # http://www.ccs.neu.edu/research/gpc/MSim/vona/terminal/VT100_Escape_Codes.html
+    F1 = '\x1bOP'
+    F2 = '\x1bOQ'
+    F3 = '\x1bOR'
+    F4 = '\x1bOS'
 
     UP = '\x1b[A'
     DOWN = '\x1b[B'
     RIGHT = '\x1b[C'
     LEFT = '\x1b[D'
+
+
+class VT100ApplicationsModeKeys(object):
+    F1 = '\x1bOP'
+    F2 = '\x1bOQ'
+    F3 = '\x1bOR'
+    F4 = '\x1bOS'
+
+    UP = '\x1bOA'
+    DOWN = '\x1bOB'
+    RIGHT = '\x1bOC'
+    LEFT = '\x1bOD'
+
+    KEYPAD_0 = '\x1bOp'
+    KEYPAD_1 = '\x1bOq'
+    KEYPAD_2 = '\x1bOr'
+    KEYPAD_3 = '\x1bOs'
+    KEYPAD_4 = '\x1bOt'
+    KEYPAD_5 = '\x1bOu'
+    KEYPAD_6 = '\x1bOv'
+    KEYPAD_7 = '\x1bOw'
+    KEYPAD_8 = '\x1bOx'
+    KEYPAD_9 = '\x1bOy'
+    KEYPAD_MINUS = '\x1bOm'
+    KEYPAD_COMMA = '\x1bOl'
+    KEYPAD_PERIOD = '\x1bOn'
+    KEYPAD_ENTER = '\x1bOM'
+
+
+class UnixKeys(object):
+    # Keys found experimentally, of unknown provenance
+    ESC = '\x1b'
+
+    HOME = '\x1b[H'
+    END = '\x1b[F'
+    PAGE_UP = '\x1b[5'
+    PAGE_DOWN = '\x1b[6'
+
     ENTER = '\n'
     CR = '\r'
     BACKSPACE = '\x7f'
 
     SPACE = ' '
 
-    F1 = '\x1bOP'
-    F2 = '\x1bOQ'
-    F3 = '\x1bOR'
-    F4 = '\x1bOS'
-    F5 = '\x1b\x4f15~'
-    F6 = '\x1b\x4f17~'
-    F7 = '\x1b\x4f18~'
-    F8 = '\x1b\x4f19~'
-    F9 = '\x1b\x4f20~'
-    F10 = '\x1b\x4f21~'
-    F11 = '\x1b\x4f23~'
-    F12 = '\x1b\x4f24~'
+    F5 = '\x1b[15~'
+    F6 = '\x1b[17~'
+    F7 = '\x1b[18~'
+    F8 = '\x1b[19~'
+    F9 = '\x1b[20~'
+    F10 = '\x1b[21~'
+    F11 = '\x1b[23~'
+    F12 = '\x1b[24~'
 
     INSERT = '\x1b[2~'
     DELETE = '\x1b[3~'
-    HOME = '\x1b[H'
-    END = '\x1b[F'
-    PAGE_UP = '\x1b[5'
-    PAGE_DOWN = '\x1b[6'
+
+
+class AlternativeUnixControls(object):
+    F5 = '\x1bO15~'
+    F6 = '\x1bO17~'
+    F7 = '\x1bO18~'
+    F8 = '\x1bO19~'
+    F9 = '\x1bO20~'
+    F10 = '\x1bO21~'
+    F11 = '\x1bO23~'
+    F12 = '\x1bO24~'
 
 
 class WindowsKeys(object):
@@ -392,7 +437,10 @@ def _make_escapes(codes):
     return escapes
 
 
-unix_keys = Keys([UnixKeys(), AsciiKeys(), ControlKeys(),
+unix_keys = Keys([VT100StandardModeKeys(),
+                  VT100ApplicationsModeKeys(),
+                  UnixKeys(), AlternativeUnixControls(),
+                  AsciiKeys(), ControlKeys(),
                   UnicodeAsciiKeys(), JargonKeys(), IntercalKeys()])
 windows_keys = Keys([WindowsKeys(), AsciiKeys(), ControlKeys(),
                      UnicodeAsciiKeys(), JargonKeys(), IntercalKeys()])
