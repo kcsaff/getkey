@@ -12,6 +12,27 @@ VERSION         DOWNLOADS        TESTS      COVERAGE
 
 Library to easily read single chars and key strokes.
 
+
+Quick Start
+===========
+
+.. code:: python
+
+  from getkey import getkey, keys
+  key = getkey()
+  if key == keys.UP:
+    ...  # Handle the UP key
+  elif key == keys.DOWN:
+    ...  # Handle the DOWN key
+  elif key == 'a':
+    ...  # Handle the `a` key
+  elif key == 'Y':
+    ...  # Handle `shift-y`
+  else:
+    # Handle other text characters
+    buffer += key
+    print(buffer)
+
 History
 =======
 
