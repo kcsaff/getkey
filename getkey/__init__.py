@@ -13,6 +13,4 @@ else:
     key = keys  # alias
     bang = __platform.bang
 
-# __all__ = [getkey, key, bang, platform]
-
-__version__ = '0.6'
+__version__ = '0.6.1'
