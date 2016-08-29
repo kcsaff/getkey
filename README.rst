@@ -201,11 +201,11 @@ Licensed under `the MIT license`_.
   :target: `Coveralls`_
   :alt: Coveralls results_
 
-.. |pip version| image:: https://pypip.in/v/getkey/badge.png
+.. |pip version| image:: https://img.shields.io/pypi/dd/getkey.svg
     :target: https://pypi.python.org/pypi/getkey
     :alt: Latest PyPI version
 
-.. |pip downloads| image:: https://pypip.in/d/getkey/badge.png
+.. |pip downloads| image:: https://img.shields.io/pypi/v/getkey.svg
     :target: https://pypi.python.org/pypi/getkey
     :alt: Number of PyPI downloads
 
