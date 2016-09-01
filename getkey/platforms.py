@@ -4,6 +4,7 @@
 # Thanks to Danny Yoo
 
 from __future__ import absolute_import, print_function
+from contextlib import contextmanager
 import codecs
 import os
 import sys
@@ -105,21 +106,28 @@ class PlatformUnix(Platform):
         except Exception as err:
             raise PlatformError('Cannot use unix platform on non-file-like stream')
 
-    def getchars(self, blocking=True):
-        """Get characters on Unix."""
-        fd = self.__decoded_stream.fileno()
+    def fileno(self):
+        return self.__decoded_stream.fileno()
 
+    @contextmanager
+    def context(self):
+        fd = self.fileno()
         old_settings = self.termios.tcgetattr(fd)
         self.tty.setcbreak(fd)
         try:
-            if blocking:
-                yield self.__decoded_stream.read(1)
-            while self.select([fd], [], [], 0)[0]:
-                yield self.__decoded_stream.read(1)
+            yield
         finally:
             self.termios.tcsetattr(
                 fd, self.termios.TCSADRAIN, old_settings
             )
+
+    def getchars(self, blocking=True):
+        """Get characters on Unix."""
+        with self.context():
+            if blocking:
+                yield self.__decoded_stream.read(1)
+            while self.select([self.fileno()], [], [], 0)[0]:
+                yield self.__decoded_stream.read(1)
 
 
 class OSReadWrapper(object):
