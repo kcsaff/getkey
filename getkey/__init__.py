@@ -14,4 +14,4 @@ keys = __platform.keys
 key = keys  # alias
 bang = __platform.bang
 
-__version__ = '0.6.4'
+__version__ = '0.6.5'
