@@ -52,6 +52,12 @@ class Platform(object):
                                           .format(interrupt))
         return keycode
 
+    def bang(self):
+        while True:
+            code = self.getkey(True)
+            name = self.keys.name(code) or '???'
+            print('{} = {!r}'.format(name, code))
+
     # You MUST override at least one of the following
     def getchars(self, blocking=True):
         char = self.getchar(blocking)
@@ -64,12 +70,6 @@ class Platform(object):
             return char
         else:
             return None
-
-    def bang(self):
-        while True:
-            code = self.getkey(True)
-            name = self.keys.name(code) or '???'
-            print('{} = {!r}'.format(name, code))
 
 
 class PlatformUnix(Platform):
@@ -200,6 +200,14 @@ class PlatformTest(Platform):
             char = self.chars[self.index]
             self.index += 1
             return char
+
+
+class PlatformInvalid(Platform):
+    KEYS = 'unix'
+    INTERRUPTS = {'CTRL_C': KeyboardInterrupt}
+
+    def getchar(self, blocking=True):
+        raise RuntimeError('Cannot getkey on invalid platform!')
 
 
 def windows_or_unix(*args, **kwargs):
