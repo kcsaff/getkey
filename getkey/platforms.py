@@ -16,7 +16,7 @@ class PlatformError(Exception):
 
 
 class Platform(object):
-    def __init__(self, keys, interrupts=None):
+    def __init__(self, keys=None, interrupts=None):
         keys = keys or self.KEYS
 
         if isinstance(keys, str):
