@@ -33,7 +33,7 @@ class PyTest(TestCommand):
 setup(
     name='getkey',
     version=__version__,
-    description="Utilities to read single characters and key-strokes",
+    description="Read single characters and key-strokes",
     long_description=read_description(),
     classifiers=[
         'Development Status :: 5 - Production/Stable',
@@ -53,7 +53,7 @@ setup(
     author_email='kc@saff.net',
     url='https://github.com/kcsaff/getkey',
     license='MIT',
-    packages=find_packages(exclude=['tests', 'venv']),
+    packages=find_packages(exclude=['tests', 'tools', 'venv']),
     include_package_data=True,
     zip_safe=False,
     cmdclass={'test': PyTest},
