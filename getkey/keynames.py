@@ -190,8 +190,8 @@ class UnixKeys(object):
 
     HOME = '\x1b[H'
     END = '\x1b[F'
-    PAGE_UP = '\x1b[5'
-    PAGE_DOWN = '\x1b[6'
+    PAGE_UP = '\x1b[5~'
+    PAGE_DOWN = '\x1b[6~'
 
     ENTER = '\n'
     CR = '\r'
