@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 
 import sys
+import io
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 from getkey import __version__
 
 
 def read_description():
-    with open('README.rst') as fd:
+    with io.open('README.rst', encoding='utf-8') as fd:
         return fd.read()
 
 
