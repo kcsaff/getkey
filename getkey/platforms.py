@@ -126,10 +126,7 @@ class PlatformUnix(Platform):
         with self.context():
             if blocking:
                 yield self.__decoded_stream.read(1)
-            if sys.platform == 'cygwin':
-                timeout = 0.02
-            else:
-                timeout = 0
+            timeout = 0.08
             while self.select([self.fileno()], [], [], timeout)[0]:
                 yield self.__decoded_stream.read(1)
 
