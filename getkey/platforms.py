@@ -113,7 +113,7 @@ class PlatformUnix(Platform):
     def context(self):
         fd = self.fileno()
         old_settings = self.termios.tcgetattr(fd)
-        self.tty.setcbreak(fd)
+        self.tty.setcbreak(fd, self.termios.TCSANOW)
         try:
             yield
         finally:
