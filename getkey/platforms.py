@@ -176,22 +176,14 @@ class PlatformWindows(Platform):
             import msvcrt
         self.msvcrt = msvcrt
 
-    if sys.version_info < (3,0):
-        def getchars(self, blocking=True):
-            """Get characters on Windows."""
+    def getchars(self, blocking=True):
+        """Get characters on Windows."""
 
-            if blocking:
-                yield self.msvcrt.getch()
-            while self.msvcrt.kbhit():
-                yield self.msvcrt.getch()
-    else:
-        def getchars(self, blocking=True):
-            """Get characters on Windows."""
+        if blocking:
+            yield self.msvcrt.getch()
+        while self.msvcrt.kbhit():
+            yield self.msvcrt.getch()
 
-            if blocking:
-                yield chr(self.msvcrt.getch()[0])
-            while self.msvcrt.kbhit():
-                yield chr(self.msvcrt.getch()[0])
 
 class PlatformTest(Platform):
     KEYS = 'unix'
