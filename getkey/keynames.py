@@ -313,7 +313,7 @@ class WindowsKeys(object):
     CTRL_ALT_9 = '\x00\x80'
     CTRL_ALT_0 = '\x00\x81'
     CTRL_ALT_MINUS = '\x00\x82'
-    CTRL_ALT_EQUALS = '\x00x83'
+    CTRL_ALT_EQUALS = '\x00\x83'
     CTRL_ALT_BACKSPACE = '\x00\x0e'
 
     ALT_F1 = '\x00h'
