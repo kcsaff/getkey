@@ -37,7 +37,10 @@ class Platform(object):
     def getkey(self, blocking=True):
         buffer = ''
         for c in self.getchars(blocking):
-            buffer += c
+            try:
+                buffer += c
+            except TypeError:
+                buffer += ''.join([chr(b) for b in c])
             if buffer not in self.keys.escapes:
                 break
 
