@@ -116,7 +116,9 @@ class PlatformUnix(Platform):
     def context(self):
         fd = self.fileno()
         old_settings = self.termios.tcgetattr(fd)
-        self.tty.setcbreak(fd)
+        raw_settings = list(old_settings)
+        raw_settings[self.tty.LFLAG] = raw_settings[self.tty.LFLAG] & ~(self.termios.ECHO | self.termios.ICANON | self.termios.ISIG)
+        self.termios.tcsetattr(fd, self.termios.TCSADRAIN, raw_settings)
         try:
             yield
         finally:
