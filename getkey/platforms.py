@@ -181,12 +181,17 @@ class PlatformWindows(Platform):
 
     def getchars(self, blocking=True):
         """Get characters on Windows."""
+        def getchsequence():
+            c = self.msvcrt.getwch()
+            # Iteration is needed to capture full escape sequences with msvcrt.getwch()
+            while c and c in self.keys.escapes:
+                c += self.msvcrt.getwch()
+            return c
 
         if blocking:
-            yield self.msvcrt.getch()
+            yield getchsequence()
         while self.msvcrt.kbhit():
-            yield self.msvcrt.getch()
-
+            yield getchsequence()
 
 class PlatformTest(Platform):
     KEYS = 'unix'
