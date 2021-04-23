@@ -37,7 +37,10 @@ class Platform(object):
     def getkey(self, blocking=True):
         buffer = ''
         for c in self.getchars(blocking):
-            buffer += c
+            try:
+                buffer += c
+            except TypeError:
+                buffer += ''.join([chr(b) for b in c])
             if buffer not in self.keys.escapes:
                 break
 
@@ -113,7 +116,9 @@ class PlatformUnix(Platform):
     def context(self):
         fd = self.fileno()
         old_settings = self.termios.tcgetattr(fd)
-        self.tty.setcbreak(fd)
+        raw_settings = list(old_settings)
+        raw_settings[self.tty.LFLAG] = raw_settings[self.tty.LFLAG] & ~(self.termios.ECHO | self.termios.ICANON | self.termios.ISIG)
+        self.termios.tcsetattr(fd, self.termios.TCSADRAIN, raw_settings)
         try:
             yield
         finally:
@@ -177,12 +182,17 @@ class PlatformWindows(Platform):
 
     def getchars(self, blocking=True):
         """Get characters on Windows."""
+        def getchsequence():
+            c = self.msvcrt.getwch()
+            # Iteration is needed to capture full escape sequences with msvcrt.getwch()
+            while c and c in self.keys.escapes:
+                c += self.msvcrt.getwch()
+            return c
 
         if blocking:
-            yield self.msvcrt.getch()
+            yield getchsequence()
         while self.msvcrt.kbhit():
-            yield self.msvcrt.getch()
-
+            yield getchsequence()
 
 class PlatformTest(Platform):
     KEYS = 'unix'

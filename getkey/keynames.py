@@ -190,8 +190,8 @@ class UnixKeys(object):
 
     HOME = '\x1b[H'
     END = '\x1b[F'
-    PAGE_UP = '\x1b[5'
-    PAGE_DOWN = '\x1b[6'
+    PAGE_UP = '\x1b[5~'
+    PAGE_DOWN = '\x1b[6~'
 
     ENTER = '\n'
     CR = '\r'
@@ -250,6 +250,19 @@ class WindowsKeys(object):
     PAGE_DOWN = '\xe0Q'
     HOME = '\xe0G'
     END = '\xe0O'
+
+    SHIFT_F1 = '\x00T'
+    SHIFT_F2 = '\x00U'
+    SHIFT_F3 = '\x00V'
+    SHIFT_F4 = '\x00W'
+    SHIFT_F5 = '\x00X'
+    SHIFT_F6 = '\x00Y'
+    SHIFT_F7 = '\x00Z'
+    SHIFT_F8 = '\x00['
+    SHIFT_F9 = '\x00\\'
+    SHIFT_F10 = '\x00]'
+    SHIFT_F11 = '\xe0\x87'
+    SHIFT_F12 = '\xe0\x88'
 
     CTRL_F1 = '\x00^'
     CTRL_F2 = '\x00_'
@@ -313,7 +326,7 @@ class WindowsKeys(object):
     CTRL_ALT_9 = '\x00\x80'
     CTRL_ALT_0 = '\x00\x81'
     CTRL_ALT_MINUS = '\x00\x82'
-    CTRL_ALT_EQUALS = '\x00x83'
+    CTRL_ALT_EQUALS = '\x00\x83'
     CTRL_ALT_BACKSPACE = '\x00\x0e'
 
     ALT_F1 = '\x00h'
