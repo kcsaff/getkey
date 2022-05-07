@@ -60,7 +60,7 @@ to disable this if you wish:
 
 .. code:: python
 
-  from getkey import plaform
+  from getkey import platform
   my_platform = platform(interrupts={})
   my_getkey = my_platform.getkey
 
@@ -156,9 +156,9 @@ asterisk in :code:`tools/keys.txt`.
 OS Support
 ----------
 
-This library has been tested on both Mac & Windows, & the Mac keys should work
-much the same on Linux.  If planning to use more esoteric control keys,
-please verify compatibility by checking
+getkey has been tested on both Mac & Windows, so the Mac keys should 
+work much the same on Linux.  If you're planning to use more esoteric control 
+keys, please verify compatibility by checking.
 
 How to contribute
 =================
